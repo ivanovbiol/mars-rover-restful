@@ -81,10 +81,10 @@
             <column autoIncrement="true" name="id" type="int">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="x" type="int">
+            <column name="current_rover_x" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
-            <column name="y" type="int">
+            <column name="current_rover_y" type="int">
                 <constraints nullable="false" unique="false"/>
             </column>
             <column name="instruction" type="varchar(1)">

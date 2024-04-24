@@ -2,8 +2,10 @@ package com.rover.app.controller;
 
 import com.rover.app.model.Plateau;
 import com.rover.app.model.Rover;
+import com.rover.app.model.dto.MovementRequest;
 import com.rover.app.model.dto.PlateauCoordinates;
 import com.rover.app.model.dto.RoverDetails;
+import com.rover.app.model.dto.RoverResponse;
 import com.rover.app.service.contract.PlateauService;
 import com.rover.app.service.contract.RoverService;
 import lombok.AllArgsConstructor;
@@ -27,5 +29,10 @@ public class OperationsController {
     @PostMapping("/rover")
     public ResponseEntity<Rover> createRover(@RequestBody RoverDetails roverDetails) {
         return ResponseEntity.ok(roverService.create(roverDetails));
+    }
+
+    @PostMapping("/rover/move")
+    public ResponseEntity<RoverResponse> moveRover(@RequestBody MovementRequest movementRequest) {
+        return ResponseEntity.ok(roverService.move(movementRequest));
     }
 }

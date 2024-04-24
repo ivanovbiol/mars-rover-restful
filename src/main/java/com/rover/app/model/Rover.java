@@ -1,15 +1,13 @@
 package com.rover.app.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "rovers")
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
