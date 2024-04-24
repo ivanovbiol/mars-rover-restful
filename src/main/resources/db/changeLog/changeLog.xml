@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="ivan" id="1" dbms="postgresql">
+
+        <createTable tableName="plateau">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="width" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="height" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="rovers">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="x" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="y" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="plateau_id" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="rovers"
+                                 baseColumnNames="plateau_id"
+                                 constraintName="pk_rovers_plateau"
+                                 referencedTableName="plateau"
+                                 referencedColumnNames="id"/>
+
+        <createTable tableName="direction">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(1)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <insert tableName="direction">
+            <column name="id" value="1"/>
+            <column name="name" value="N"/>
+        </insert>
+
+
+        <insert tableName="direction">
+            <column name="id" value="2"/>
+            <column name="name" value="S"/>
+        </insert>
+
+        <insert tableName="direction">
+            <column name="id" value="3"/>
+            <column name="name" value="W"/>
+        </insert>
+
+        <insert tableName="direction">
+            <column name="id" value="4"/>
+            <column name="name" value="E"/>
+        </insert>
+
+        <createTable tableName="command_history">
+            <column autoIncrement="true" name="id" type="int">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="x" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="y" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="instruction" type="varchar(1)">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="direction_id" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="rover_id" type="int">
+                <constraints nullable="false" unique="false"/>
+            </column>
+            <column name="executed" type="boolean">
+                <constraints nullable="false" unique="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="command_history"
+                                 baseColumnNames="direction_id"
+                                 constraintName="pk_command_history_direction"
+                                 referencedTableName="direction"
+                                 referencedColumnNames="id"/>
+
+
+        <addForeignKeyConstraint baseTableName="command_history"
+                                 baseColumnNames="rover_id"
+                                 constraintName="pk_command_history_rovers"
+                                 referencedTableName="rovers"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
