@@ -38,11 +38,16 @@ public class RoverServiceImpl implements RoverService {
 
     @Override
     public Rover linkToPlateau(int roverId, int plateauId) {
-        Plateau plateau = plateauRepository.findById(plateauId).orElseThrow(() -> new IllegalStateException("No such plateau"));
-        Rover rover = roverRepository.findById(roverId).orElseThrow(() -> new IllegalArgumentException("No such Rover"));
-        rover.setPlateau(plateau);
-        log.info(String.format("Plateau %d linked to Rover %d", plateauId, roverId));
-        return roverRepository.save(rover);
+        try {
+            Plateau plateau = plateauRepository.findById(plateauId).orElseThrow(() -> new IllegalStateException("No such plateau"));
+            Rover rover = roverRepository.findById(roverId).orElseThrow(() -> new IllegalArgumentException("No such Rover"));
+            rover.setPlateau(plateau);
+            log.info(String.format("Plateau %d linked to Rover %d", plateauId, roverId));
+            return roverRepository.save(rover);
+        } catch (IllegalArgumentException e) {
+            log.error(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
 
     @Override
