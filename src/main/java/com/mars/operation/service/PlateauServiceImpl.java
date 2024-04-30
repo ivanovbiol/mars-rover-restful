@@ -1,9 +1,9 @@
-package com.rover.app.service;
+package com.mars.operation.service;
 
-import com.rover.app.model.Plateau;
-import com.rover.app.model.dto.PlateauCoordinates;
-import com.rover.app.repository.PlateauRepository;
-import com.rover.app.service.contract.PlateauService;
+import com.mars.operation.model.Plateau;
+import com.mars.operation.model.dto.PlateauCoordinates;
+import com.mars.operation.repository.PlateauRepository;
+import com.mars.operation.service.contract.PlateauService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.rover.app.model.dto;
+package com.mars.operation.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RoverResponse {
 
-    private int id;
+    private int roverId;
     private int currentX;
     private int currentY;
     private String direction;

@@ -1,8 +1,10 @@
+version: '3.5'
+
 services:
 
   # PostreSQL
   postgres:
-    image: postgres
+    image: postgres:12
     container_name: postgres
     ports:
       - 5432:5432
@@ -10,6 +12,8 @@ services:
       POSTGRES_DB: storage
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
+    networks:
+      - rover-network
 
   # Liquibase
   liquibase:
@@ -20,7 +24,7 @@ services:
     volumes:
       - ./src/main/resources/db/changeLog:/liquibase/changelog
     environment:
-      - DATABASE_URL=jdbc:postgresql://127.0.0.1:5432/storage
+      - DATABASE_URL=jdbc:postgresql://postgres:5432/storage
       - DATABASE_USERNAME=root
       - DATABASE_PASSWORD=root
       - DATABASE_CHANGELOG=/liquibase/changelog/changeLog.xml
@@ -31,3 +35,25 @@ services:
       - --username=root
       - --password=root
       - update
+    networks:
+      - rover-network
+
+  # Spring boot application
+  rover:
+    container_name: rover
+    depends_on:
+      - postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - rover-network
+    restart: on-failure
+
+# Docker containers network (name attribute is needed!)
+networks:
+  rover-network:
+    name: rover-network
+    driver: bridge

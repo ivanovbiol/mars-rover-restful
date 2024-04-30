@@ -1,6 +1,6 @@
-package com.rover.app.repository;
+package com.mars.operation.repository;
 
-import com.rover.app.model.Rover;
+import com.mars.operation.model.Rover;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoverRepository extends JpaRepository<Rover, Integer> {

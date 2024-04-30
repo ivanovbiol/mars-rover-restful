@@ -1,16 +1,15 @@
-package com.rover.app.service;
+package com.mars.operation.service;
 
-import com.rover.app.model.CommandHistory;
-import com.rover.app.model.Plateau;
-import com.rover.app.model.Rover;
-import com.rover.app.model.dto.MovementRequest;
-import com.rover.app.model.dto.RoverDetails;
-import com.rover.app.model.dto.RoverResponse;
-import com.rover.app.repository.CommandHistoryRepository;
-import com.rover.app.repository.DirectionRepository;
-import com.rover.app.repository.PlateauRepository;
-import com.rover.app.repository.RoverRepository;
-import com.rover.app.service.contract.RoverService;
+import com.mars.operation.model.CommandHistory;
+import com.mars.operation.model.Plateau;
+import com.mars.operation.model.Rover;
+import com.mars.operation.model.dto.RoverDetails;
+import com.mars.operation.model.dto.RoverResponse;
+import com.mars.operation.repository.CommandHistoryRepository;
+import com.mars.operation.repository.DirectionRepository;
+import com.mars.operation.repository.PlateauRepository;
+import com.mars.operation.repository.RoverRepository;
+import com.mars.operation.service.contract.RoverService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ public class RoverServiceImpl implements RoverService {
         Rover rover = roverRepository.save(Rover.builder()
                 .x(roverDetails.getX())
                 .y(roverDetails.getY())
-                .plateau(plateauRepository.findById(1).orElseThrow(() -> new IllegalArgumentException("Create a Plateau first")))
                 .direction(directionRepository.findByName(roverDetails.getDirection()))
                 .build());
         log.info("Rover created");
@@ -39,11 +37,19 @@ public class RoverServiceImpl implements RoverService {
     }
 
     @Override
-    @Transactional
-    public RoverResponse move(MovementRequest movementRequest) {
+    public Rover linkToPlateau(int roverId, int plateauId) {
+        Plateau plateau = plateauRepository.findById(plateauId).orElseThrow(() -> new IllegalStateException("No such plateau"));
+        Rover rover = roverRepository.findById(roverId).orElseThrow(() -> new IllegalArgumentException("No such Rover"));
+        rover.setPlateau(plateau);
+        log.info(String.format("Plateau %d linked to Rover %d", plateauId, roverId));
+        return roverRepository.save(rover);
+    }
 
+    @Override
+    @Transactional
+    public RoverResponse move(int id, String instructions) {
         // Find the rover from the repository
-        Rover rover = roverRepository.findById(movementRequest.getRoverId())
+        Rover rover = roverRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such Rover"));
 
         // Retrieve the plateau details
@@ -51,7 +57,7 @@ public class RoverServiceImpl implements RoverService {
                 .orElseThrow(() -> new IllegalStateException("Rover is not on any plateau"));
 
         // Move the rover based on the instructions
-        moveRover(rover, movementRequest.getInstructions(), plateau);
+        moveRover(rover, instructions, plateau);
 
         // Create and return the response DTO
         return createRoverResponse(roverRepository.save(rover));
@@ -59,7 +65,7 @@ public class RoverServiceImpl implements RoverService {
 
     private RoverResponse createRoverResponse(Rover rover) {
         return RoverResponse.builder()
-                .id(rover.getId())
+                .roverId(rover.getId())
                 .currentX(rover.getX())
                 .currentY(rover.getY())
                 .direction(rover.getDirection().getName()).build();
@@ -93,15 +99,22 @@ public class RoverServiceImpl implements RoverService {
             } else if (instruction == 'M') {
                 int nextX = x;
                 int nextY = y;
-                if (direction.equals("N")) {
-                    nextY++;
-                } else if (direction.equals("E")) {
-                    nextX++;
-                } else if (direction.equals("S")) {
-                    nextY--;
-                } else if (direction.equals("W")) {
-                    nextX--;
+
+                switch (direction) {
+                    case "N":
+                        nextY++;
+                        break;
+                    case "E":
+                        nextX++;
+                        break;
+                    case "S":
+                        nextY--;
+                        break;
+                    case "W":
+                        nextX--;
+                        break;
                 }
+
                 if (isValidPosition(nextX, nextY, plateau.getWidth(), plateau.getHeight())) {
                     x = nextX;
                     y = nextY;
@@ -112,8 +125,6 @@ public class RoverServiceImpl implements RoverService {
             } else {
                 throw new IllegalArgumentException("Invalid instruction: " + instruction);
             }
-
-
         }
 
         // Update the rover's position after executing all instructions

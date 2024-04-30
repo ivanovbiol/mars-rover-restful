@@ -1,4 +1,4 @@
-package com.rover.app.model;
+package com.mars.operation.model;
 
 import lombok.*;
 
