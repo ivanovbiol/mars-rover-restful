@@ -1,5 +1,6 @@
 package com.mars.operation.controller;
 
+import com.mars.operation.model.CommandHistory;
 import com.mars.operation.model.Plateau;
 import com.mars.operation.model.Rover;
 import com.mars.operation.model.dto.PlateauCoordinates;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -42,6 +44,11 @@ public class OperationsController {
     public ResponseEntity<RoverResponse> moveRover(@PathVariable @Positive int id,
                                                    @RequestParam @NotBlank(message = "Instructions can't be blank") String instructions) {
         return ResponseEntity.ok(roverService.move(id, instructions));
+    }
+
+    @GetMapping("/rover/{id}/command-history")
+    public ResponseEntity<List<CommandHistory>> findRoverHistory(@PathVariable @Positive int id) {
+        return ResponseEntity.ok(roverService.history(id));
     }
 
     @GetMapping

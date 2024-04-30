@@ -17,6 +17,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -104,6 +106,25 @@ public class RoverServiceImplTest {
         assertThrows(IllegalStateException.class, () -> roverService.linkToPlateau(1, 1));
     }
 
+    @Test
+    public void testHistory() {
+        int roverId = 1;
+        CommandHistory commandHistory = CommandHistory.builder()
+                .id(1)
+                .currentRoverX(1)
+                .currentRoverY(2)
+                .instruction("L")
+                .executed(false).build();
+
+        when(commandHistoryRepository.findByRoverId(roverId)).thenReturn(Collections.singletonList(commandHistory));
+
+        List<CommandHistory> result = roverService.history(roverId);
+
+        verify(commandHistoryRepository).findByRoverId(roverId);
+
+        assertEquals(1, result.size());
+        assertEquals(commandHistory, result.get(0));
+    }
 
     @Test
     public void moveRover_should_returnRoverResponse() {
