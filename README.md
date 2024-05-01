@@ -10,37 +10,37 @@ The web application runs on localhost:8080.
 
 POST /plateau
 
-![img.png](img.png)
+![main/resources/readme/img.png](src/main/resources/readme/img.png)
 
-![img_5.png](img_5.png)
+![main/resources/readme/img_5.png](src/main/resources/readme/img_5.png)
 
 ### Create a Rover
 
 POST /rover
 
-![img_1.png](img_1.png)
+![main/resources/readme/img_1.png](src/main/resources/readme/img_1.png)
 
-![img_6.png](img_6.png)
+![main/resources/readme/img_6.png](src/main/resources/readme/img_6.png)
 
 ### Link Rover to Plateau
 
 PATCH /rover/{roverId}/plateau/{plateauId}
 
-![img_2.png](img_2.png)
+![main/resources/readme/img_2.png](src/main/resources/readme/img_2.png)
 
 ### Move Rover
 
 POST /rover/{id}/move
 
-![img_3.png](img_3.png)
+![main/resources/readme/img_3.png](src/main/resources/readme/img_3.png)
 
 ### Inspect history of the commands (whether they are executed or not)
 
 GET /rover/{id}/command-history
 
-![img_4.png](img_4.png)
+![main/resources/readme/img_4.png](src/main/resources/readme/img_4.png)
 
-![img_9.png](img_9.png)
+![main/resources/readme/img_9.png](src/main/resources/readme/img_9.png)
 
 # Technical overview
 
@@ -70,8 +70,8 @@ I can't demonstrate UML diagram since my IntelliJ ultimate license expired - sor
  - **Liquibase** (official liquibase Docker image) creates the tables and imports sample data in PostgreSQL DB on project starup (see **resources/db/chaneLog/changeLog.xml**).
  - **Slf4j** logs performed actions .
 
-![img_10.png](img_10.png)
+![main/resources/readme/img_10.png](src/main/resources/readme/img_10.png)
  
  - All tools along with the Dockerized Spring Boot app (**rover** container) are instantiated as Docker containers after **docker-compose up**. (The liquibase container starts, imports the data and after that shuts down - check the logs of the container. If by any chance the container can't connect with the database, just restart it and it will import the data.)
  
-![img_11.png](img_11.png)
+![main/resources/readme/img_11.png](src/main/resources/readme/img_11.png)
