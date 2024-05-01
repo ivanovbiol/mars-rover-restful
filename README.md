@@ -75,3 +75,8 @@ I can't demonstrate UML diagram since my IntelliJ ultimate license expired - sor
  - All tools along with the Dockerized Spring Boot app (**rover** container) are instantiated as Docker containers after **docker-compose up**. (The liquibase container starts, imports the data and after that shuts down - check the logs of the container. If by any chance the container can't connect with the database, just restart it and it will import the data.)
  
 ![main/resources/readme/img_11.png](src/main/resources/readme/img_11.png)
+
+
+## Second implementation of the task
+
+The second implementation can be found in the unit test in test/java/com/mars/operation/task/MarsMission.java.
